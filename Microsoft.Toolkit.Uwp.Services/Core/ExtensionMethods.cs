@@ -15,6 +15,7 @@ using System.Net;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Microsoft.Toolkit.Uwp.Services.Bing;
+using Microsoft.Toolkit.Uwp.Services.CognitiveServices;
 
 namespace Microsoft.Toolkit.Uwp.Services.Core
 {
@@ -74,6 +75,26 @@ namespace Microsoft.Toolkit.Uwp.Services.Core
         /// <param name="value">BingLanguage enumeration.</param>
         /// <returns>Returns language code.</returns>
         public static string GetStringValue(this BingLanguage value)
+        {
+            return GetStringValue((Enum)value);
+        }
+
+        /// <summary>
+        /// Converts between market code and market name.
+        /// </summary>
+        /// <param name="value">WebSearchMarket enumeration.</param>
+        /// <returns>Returns market code.</returns>
+        public static string GetStringValue(this WebSearchMarket value)
+        {
+            return GetStringValue((Enum)value);
+        }
+
+        /// <summary>
+        /// Converts between safe search code and name.
+        /// </summary>
+        /// <param name="value">SafeSearch enumeration.</param>
+        /// <returns>Returns safe search value.</returns>
+        public static string GetStringValue(this SafeSearch value)
         {
             return GetStringValue((Enum)value);
         }

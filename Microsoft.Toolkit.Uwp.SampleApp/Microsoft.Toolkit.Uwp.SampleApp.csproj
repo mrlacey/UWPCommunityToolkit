@@ -236,6 +236,7 @@
     <Content Include="SamplePages\Bing Service\icon.png" />
     <Content Include="SamplePages\BladeView\BladeView.png" />
     <Content Include="SamplePages\Blur\BlurBehavior.png" />
+    <Content Include="SamplePages\Microsoft Cognitive Services\icon_websearch.png" />
     <Content Include="SamplePages\DropShadowPanel\DropShadowPanel.png" />
     <Content Include="SamplePages\FadeHeader\FadeHeaderBehavior.png" />
     <Content Include="SamplePages\DropShadowPanel\Trex.png" />
@@ -349,6 +350,7 @@
     <Content Include="SamplePages\MasterDetailsView\MasterDetailsViewCode.bind" />
     <Content Include="SamplePages\Microsoft Translator Service\MicrosoftTranslatorCode.bind" />
     <Content Include="SamplePages\AdvancedCollectionView\AdvancedCollectionView.bind" />
+    <Content Include="SamplePages\Microsoft Cognitive Services\WebSearchCode.bind" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -364,6 +366,9 @@
     <Compile Include="Models\Email.cs" />
     <Compile Include="SamplePages\AdvancedCollectionView\AdvancedCollectionViewPage.xaml.cs">
       <DependentUpon>AdvancedCollectionViewPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SamplePages\Microsoft Cognitive Services\CognitiveServicesPage.xaml.cs">
+      <DependentUpon>CognitiveServicesPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="SamplePages\ConnectionHelper\ConnectionHelperPage.xaml.cs">
       <DependentUpon>ConnectionHelperPage.xaml</DependentUpon>
@@ -550,6 +555,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SamplePages\AdvancedCollectionView\AdvancedCollectionViewPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SamplePages\Microsoft Cognitive Services\CognitiveServicesPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

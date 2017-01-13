@@ -311,6 +311,14 @@
         "CodeUrl": "https://github.com/Microsoft/UWPCommunityToolkit/tree/master/Microsoft.Toolkit.Uwp.Services/Services/MicrosoftTranslator",
         "CodeFile": "MicrosoftTranslatorCode.bind",
         "Icon": "/SamplePages/Microsoft Translator Service/TranslatorService.png"
+      },
+      {
+        "Name": "Microsoft Cognitive Services",
+        "Type": "CognitiveServicesPage",
+        "About": "Microsoft Cognitive Services allows you to bring intelligent search to your apps and harness the ability to comb billions of webpages, images, videos, and news with a single API call..",
+        "CodeUrl": "https://github.com/Microsoft/UWPCommunityToolkit/tree/master/Microsoft.Toolkit.Uwp.Services/Services/CognitiveServices",
+        "CodeFile": "WebSearchCode.bind",
+        "Icon": "/SamplePages/Microsoft Cognitive Services/icon_websearch.png"
       }
     ]
   },

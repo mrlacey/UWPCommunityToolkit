@@ -59,6 +59,13 @@
     <Compile Include="Services\Bing\BingDataProvider.cs" />
     <Compile Include="Services\Bing\BingParser.cs" />
     <Compile Include="Services\Bing\BingService.cs" />
+    <Compile Include="Services\CognitiveServices\SafeSearch.cs" />
+    <Compile Include="Services\CognitiveServices\WebSearchConfig.cs" />
+    <Compile Include="Services\CognitiveServices\WebSearchDataProvider.cs" />
+    <Compile Include="Services\CognitiveServices\WebSearchMarket.cs" />
+    <Compile Include="Services\CognitiveServices\WebSearchParser.cs" />
+    <Compile Include="Services\CognitiveServices\WebSearchResult.cs" />
+    <Compile Include="Services\CognitiveServices\WebSearchService.cs" />
     <Compile Include="Services\Facebook\FacebookAlbum.cs" />
     <Compile Include="Services\Facebook\FacebookOAuthTokens.cs" />
     <Compile Include="Services\Facebook\FacebookRequestSource.cs" />
