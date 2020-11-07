@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Threading.Tasks;
+using Microsoft.Toolkit.Uwp.Extensions;
 using Windows.Foundation;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -55,12 +57,29 @@ namespace Microsoft.Toolkit.Uwp.UI.Controls
 
         private void HookUpEvents()
         {
+            Click -= EyedropperToolButton_Click;
             Click += EyedropperToolButton_Click;
+            Unloaded -= EyedropperToolButton_Unloaded;
             Unloaded += EyedropperToolButton_Unloaded;
+            ActualThemeChanged -= EyedropperToolButton_ActualThemeChanged;
             ActualThemeChanged += EyedropperToolButton_ActualThemeChanged;
-            Window.Current.SizeChanged += Window_SizeChanged;
+            if (ControlHelpers.IsXamlRootAvailable && XamlRoot != null)
+            {
+                XamlRoot.Changed -= XamlRoot_Changed;
+                XamlRoot.Changed += XamlRoot_Changed;
+                _eyedropper.XamlRoot = XamlRoot;
+            }
+            else
+            {
+                Window.Current.SizeChanged -= Window_SizeChanged;
+                Window.Current.SizeChanged += Window_SizeChanged;
+            }
+
+            _eyedropper.ColorChanged -= Eyedropper_ColorChanged;
             _eyedropper.ColorChanged += Eyedropper_ColorChanged;
+            _eyedropper.PickStarted -= Eyedropper_PickStarted;
             _eyedropper.PickStarted += Eyedropper_PickStarted;
+            _eyedropper.PickCompleted -= Eyedropper_PickCompleted;
             _eyedropper.PickCompleted += Eyedropper_PickCompleted;
         }
 
@@ -69,7 +88,15 @@ namespace Microsoft.Toolkit.Uwp.UI.Controls
             Click -= EyedropperToolButton_Click;
             Unloaded -= EyedropperToolButton_Unloaded;
             ActualThemeChanged -= EyedropperToolButton_ActualThemeChanged;
-            Window.Current.SizeChanged -= Window_SizeChanged;
+            if (ControlHelpers.IsXamlRootAvailable && XamlRoot != null)
+            {
+                XamlRoot.Changed -= XamlRoot_Changed;
+            }
+            else
+            {
+                Window.Current.SizeChanged -= Window_SizeChanged;
+            }
+
             _eyedropper.ColorChanged -= Eyedropper_ColorChanged;
             _eyedropper.PickStarted -= Eyedropper_PickStarted;
             _eyedropper.PickCompleted -= Eyedropper_PickCompleted;
@@ -165,18 +192,38 @@ namespace Microsoft.Toolkit.Uwp.UI.Controls
             EyedropperEnabled = !EyedropperEnabled;
         }
 
-        private void Window_SizeChanged(object sender, WindowSizeChangedEventArgs e)
+        private async void Window_SizeChanged(object sender, WindowSizeChangedEventArgs e)
         {
-            UpdateEyedropperWorkArea();
+            await UpdateEyedropperWorkAreaAsync();
         }
 
-        private async void UpdateEyedropperWorkArea()
+        private async void XamlRoot_Changed(XamlRoot sender, XamlRootChangedEventArgs args)
+        {
+            await UpdateEyedropperWorkAreaAsync();
+        }
+
+        private async Task UpdateEyedropperWorkAreaAsync()
         {
             if (TargetElement != null)
             {
-                var transform = TargetElement.TransformToVisual(Window.Current.Content);
-                var position = transform.TransformPoint(default(Point));
-                _eyedropper.WorkArea = new Rect(position, new Size(TargetElement.ActualWidth, TargetElement.ActualHeight));
+                UIElement content;
+                if (ControlHelpers.IsXamlRootAvailable && XamlRoot != null)
+                {
+                    content = XamlRoot.Content;
+                }
+                else
+                {
+                    content = Window.Current.Content;
+                }
+
+                var transform = TargetElement.TransformToVisual(content);
+                var position = transform.TransformPoint(default);
+                _eyedropper.WorkArea = position.ToRect(TargetElement.ActualWidth, TargetElement.ActualHeight);
+                if (ControlHelpers.IsXamlRootAvailable && XamlRoot != null)
+                {
+                    _eyedropper.XamlRoot = XamlRoot;
+                }
+
                 await _eyedropper.UpdateAppScreenshotAsync();
             }
         }

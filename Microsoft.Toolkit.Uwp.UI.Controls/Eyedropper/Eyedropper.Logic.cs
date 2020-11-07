@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Graphics.Canvas;
+using Microsoft.Toolkit.Uwp.Extensions;
 using Windows.Foundation;
 using Windows.Graphics.DirectX;
 using Windows.Graphics.Display;
@@ -36,7 +37,7 @@ namespace Microsoft.Toolkit.Uwp.UI.Controls
             UpdatePreview(x, y);
         }
 
-        private void UpadateWorkArea()
+        private void UpdateWorkArea()
         {
             if (_targetGrid == null)
             {
@@ -50,9 +51,20 @@ namespace Microsoft.Toolkit.Uwp.UI.Controls
             else
             {
                 var left = WorkArea.Left;
-                var right = Window.Current.Bounds.Width - WorkArea.Right;
                 var top = WorkArea.Top;
-                var bottom = Window.Current.Bounds.Height - WorkArea.Bottom;
+                double right;
+                double bottom;
+                if (ControlHelpers.IsXamlRootAvailable && XamlRoot != null)
+                {
+                    right = XamlRoot.Size.Width - WorkArea.Right;
+                    bottom = XamlRoot.Size.Height - WorkArea.Bottom;
+                }
+                else
+                {
+                    right = Window.Current.Bounds.Width - WorkArea.Right;
+                    bottom = Window.Current.Bounds.Height - WorkArea.Bottom;
+                }
+
                 _targetGrid.Margin = new Thickness(left, top, right, bottom);
             }
         }
@@ -87,7 +99,7 @@ namespace Microsoft.Toolkit.Uwp.UI.Controls
                     for (var j = colorStartX; j < colorEndX; j++)
                     {
                         var color = colors[((i - colorStartY) * width) + (j - colorStartX)];
-                        drawingSession.FillRectangle(new Rect(startPoint, size), color);
+                        drawingSession.FillRectangle(startPoint.ToRect(size), color);
                         startPoint.X += PreviewPixelsPerRawPixel;
                     }
 
@@ -98,14 +110,41 @@ namespace Microsoft.Toolkit.Uwp.UI.Controls
 
         internal async Task UpdateAppScreenshotAsync()
         {
-            var renderTarget = new RenderTargetBitmap();
-            var diaplayInfo = DisplayInformation.GetForCurrentView();
-            var scale = diaplayInfo.RawPixelsPerViewPixel;
-            var scaleWidth = (int)Math.Ceiling(Window.Current.Bounds.Width / scale);
-            var scaleHeight = (int)Math.Ceiling(Window.Current.Bounds.Height / scale);
-            await renderTarget.RenderAsync(Window.Current.Content, scaleWidth, scaleHeight);
-            var pixels = await renderTarget.GetPixelsAsync();
-            _appScreenshot = CanvasBitmap.CreateFromBytes(_device, pixels, renderTarget.PixelWidth, renderTarget.PixelHeight, DirectXPixelFormat.B8G8R8A8UIntNormalized);
+            double scale;
+            double width;
+            double height;
+            UIElement content;
+            if (ControlHelpers.IsXamlRootAvailable && XamlRoot != null)
+            {
+                scale = XamlRoot.RasterizationScale;
+                width = XamlRoot.Size.Width;
+                height = XamlRoot.Size.Height;
+                content = XamlRoot.Content;
+            }
+            else
+            {
+                var displayInfo = DisplayInformation.GetForCurrentView();
+                scale = displayInfo.RawPixelsPerViewPixel;
+                width = Window.Current.Bounds.Width;
+                height = Window.Current.Bounds.Height;
+                content = Window.Current.Content;
+            }
+
+            try
+            {
+                var renderTarget = new RenderTargetBitmap();
+                var scaleWidth = (int)Math.Ceiling(width / scale);
+                var scaleHeight = (int)Math.Ceiling(height / scale);
+                await renderTarget.RenderAsync(content, scaleWidth, scaleHeight);
+                var pixels = await renderTarget.GetPixelsAsync();
+                _appScreenshot?.Dispose();
+                _appScreenshot = null;
+                _appScreenshot = CanvasBitmap.CreateFromBytes(_device, pixels, renderTarget.PixelWidth, renderTarget.PixelHeight, DirectXPixelFormat.B8G8R8A8UIntNormalized);
+            }
+            catch (OutOfMemoryException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+            }
         }
     }
 }

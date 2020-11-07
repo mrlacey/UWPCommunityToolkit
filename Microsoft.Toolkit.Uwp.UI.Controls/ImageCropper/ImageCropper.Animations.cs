@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using Microsoft.Toolkit.Uwp.Extensions;
 using Windows.Foundation;
 using Windows.UI.Composition;
 using Windows.UI.Xaml;
@@ -97,7 +98,6 @@ namespace Microsoft.Toolkit.Uwp.UI.Controls
         {
             var rectKeyframes = new List<DiscreteObjectKeyFrame>();
             var step = TimeSpan.FromMilliseconds(10);
-            var total = duration.TotalMilliseconds;
             var startPointFrom = new Point(from.X, from.Y);
             var endPointFrom = new Point(from.X + from.Width, from.Y + from.Height);
             var startPointTo = new Point(to.X, to.Y);
@@ -118,7 +118,7 @@ namespace Microsoft.Toolkit.Uwp.UI.Controls
                 rectKeyframes.Add(new DiscreteObjectKeyFrame
                 {
                     KeyTime = KeyTime.FromTimeSpan(time),
-                    Value = new Rect(startPoint, endPoint)
+                    Value = startPoint.ToRect(endPoint)
                 });
             }
 

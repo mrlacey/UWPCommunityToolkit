@@ -1,9 +1,13 @@
-Fixes #
-<!-- Link to relevant issue (for ex: #1234) which will automatically close the issue once the PR is merged -->
+<!-- 🚨 Please Do Not skip any instructions and information mentioned below as they are all required and essential to evaluate and test the PR. By fulfilling all the required information you will be able to reduce the volume of questions and most likely help merge the PR faster 🚨 -->
+
+## Fixes #
+<!-- Add the relevant issue number after the "#" mentioned above (for ex: Fixes #1234) which will automatically close the issue once the PR is merged. -->
+
+<!-- Add a brief overview here of the feature/bug & fix. -->
 
 ## PR Type
 What kind of change does this PR introduce?
-<!-- Please uncomment one ore more that apply to this PR -->
+<!-- Please uncomment one or more that apply to this PR. -->
 
 <!-- - Bugfix -->
 <!-- - Feature -->
@@ -20,6 +24,7 @@ What kind of change does this PR introduce?
 
 
 ## What is the new behavior?
+<!-- Describe how was this issue resolved or changed? -->
 
 
 ## PR Checklist
@@ -34,9 +39,8 @@ Please check if your PR fulfills the following requirements:
 - [ ] Header has been added to all new source files (run *build/UpdateHeaders.bat*)
 - [ ] Contains **NO** breaking changes
 
-
 <!-- If this PR contains a breaking change, please describe the impact and migration path for existing applications below. 
-     Please note that breaking changes are likely to be rejected -->
+     Please note that breaking changes are likely to be rejected within minor release cycles or held until major versions. -->
 
 
 ## Other information

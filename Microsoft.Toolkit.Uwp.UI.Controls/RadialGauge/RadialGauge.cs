@@ -88,7 +88,7 @@ namespace Microsoft.Toolkit.Uwp.UI.Controls
         /// Identifies the ValueStringFormat dependency property.
         /// </summary>
         public static readonly DependencyProperty ValueStringFormatProperty =
-            DependencyProperty.Register(nameof(ValueStringFormat), typeof(string), typeof(RadialGauge), new PropertyMetadata("N0"));
+            DependencyProperty.Register(nameof(ValueStringFormat), typeof(string), typeof(RadialGauge), new PropertyMetadata("N0", (s, e) => OnValueChanged(s)));
 
         /// <summary>
         /// Identifies the TickSpacing dependency property.
@@ -469,6 +469,11 @@ namespace Microsoft.Toolkit.Uwp.UI.Controls
         {
             OnValueChanged(this);
             base.OnValueChanged(oldValue, newValue);
+            if (AutomationPeer.ListenerExists(AutomationEvents.LiveRegionChanged))
+            {
+                var peer = FrameworkElementAutomationPeer.FromElement(this) as RadialGaugeAutomationPeer;
+                peer?.RaiseValueChangedEvent(oldValue, newValue);
+            }
         }
 
         private static void OnValueChanged(DependencyObject d)

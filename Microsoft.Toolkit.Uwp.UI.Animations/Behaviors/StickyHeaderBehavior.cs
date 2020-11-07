@@ -6,7 +6,6 @@ using Microsoft.Toolkit.Uwp.UI.Animations.Expressions;
 using Microsoft.Toolkit.Uwp.UI.Behaviors;
 using Microsoft.Toolkit.Uwp.UI.Extensions;
 using Windows.Foundation;
-using Windows.Foundation.Metadata;
 using Windows.UI.Composition;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -105,13 +104,6 @@ namespace Microsoft.Toolkit.Uwp.UI.Animations.Behaviors
         private bool AssignAnimation()
         {
             StopAnimation();
-
-            // Confirm that Windows.UI.Xaml.Hosting.ElementCompositionPreview is available (Windows 10 10586 or later).
-            if (!ApiInformation.IsMethodPresent("Windows.UI.Xaml.Hosting.ElementCompositionPreview", nameof(ElementCompositionPreview.GetScrollViewerManipulationPropertySet)))
-            {
-                // Just return true since it's not supported
-                return true;
-            }
 
             if (AssociatedObject == null)
             {
@@ -236,7 +228,15 @@ namespace Microsoft.Toolkit.Uwp.UI.Animations.Behaviors
         {
             var scroller = (ScrollViewer)sender;
 
-            var focusedElement = FocusManager.GetFocusedElement();
+            object focusedElement;
+            if (ApiInformationHelper.IsXamlRootAvailable && scroller.XamlRoot != null)
+            {
+                focusedElement = FocusManager.GetFocusedElement(scroller.XamlRoot);
+            }
+            else
+            {
+                focusedElement = FocusManager.GetFocusedElement();
+            }
 
             if (focusedElement is UIElement element)
             {

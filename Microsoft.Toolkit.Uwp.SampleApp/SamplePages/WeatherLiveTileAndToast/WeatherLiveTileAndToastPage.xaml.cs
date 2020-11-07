@@ -5,14 +5,11 @@
 using System;
 using Microsoft.Toolkit.Uwp.Notifications;
 using Microsoft.Toolkit.Uwp.SampleApp.Common;
-using Microsoft.Toolkit.Uwp.SampleApp.Models;
 using NotificationsVisualizerLibrary;
-using Windows.Foundation.Metadata;
 using Windows.System.Profile;
 using Windows.UI.Notifications;
 using Windows.UI.StartScreen;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Navigation;
 
 namespace Microsoft.Toolkit.Uwp.SampleApp.SamplePages
 {
@@ -119,10 +116,8 @@ namespace Microsoft.Toolkit.Uwp.SampleApp.SamplePages
         {
             switch (AnalyticsInfo.VersionInfo.DeviceFamily)
             {
-                // Desktop and Mobile started supporting adaptive toasts in API contract 3 (Anniversary Update)
-                case "Windows.Mobile":
                 case "Windows.Desktop":
-                    return ApiInformation.IsApiContractPresent("Windows.Foundation.UniversalApiContract", 3);
+                    return true;
 
                 // Other device families do not support adaptive toasts
                 default:
@@ -314,7 +309,7 @@ namespace Microsoft.Toolkit.Uwp.SampleApp.SamplePages
                 tile.VisualElements.Square150x150Logo = Constants.Square150x150Logo;
                 tile.VisualElements.Wide310x150Logo = Constants.Wide310x150Logo;
                 tile.VisualElements.Square310x310Logo = Constants.Square310x310Logo;
-                var dontWait = tile.UpdateAsync(); // Commit changes (no need to await)
+                _ = tile.UpdateAsync(); // Commit changes (no need to await)
 
                 tile.CreateTileUpdater().Update(new TileNotification(_tileContent.GetXml()));
             }
